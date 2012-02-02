@@ -8,3 +8,4 @@ build
 /clojurecraft
 *.orig
 bundled
+temp.clj

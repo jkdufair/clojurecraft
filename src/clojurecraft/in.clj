@@ -105,7 +105,7 @@
 ; Reading Packets ------------------------------------------------------------------
 (defn- read-packet-keepalive [bot conn]
   (assoc {}
-    :keep-alive-id (-read-int conn)))
+    :keepaliveid (-read-int conn)))
 
 (defn- read-packet-handshake [bot conn]
   (assoc {}
@@ -157,7 +157,9 @@
 
 (defn- read-packet-updatehealth [bot conn]
   (let [payload (assoc {}
-                       :health (-read-short conn))]
+                  :health (-read-short conn)
+                  :food (-read-short conn)
+                  :foodsaturation (-read-float conn))]
     (if (<= (:health payload) 0)
       (events/fire-dead bot))
     payload))
@@ -169,8 +171,8 @@
 (defn- read-packet-playerpositionlook [bot conn]
   (let [payload (assoc {}
                        :x (-read-double conn)
-                       :stance (-read-double conn)
                        :y (-read-double conn)
+                       :stance (-read-double conn)
                        :z (-read-double conn)
                        :yaw (-read-float conn)
                        :pitch (-read-float conn)
@@ -369,21 +371,22 @@
          :pitch (-read-byte conn)))
 
 (defn- read-packet-entityteleport [bot conn]
-  ; TODO: record yaw/pitch
+  (println "foobar")
   (let [payload (assoc {}
                        :eid (-read-int conn)
-                       :x (float (/ (-read-int conn) 32))
-                       :y (float (/ (-read-int conn) 32))
-                       :z (float (/ (-read-int conn) 32))
+                       :x (-read-int conn)
+                       :y (-read-int conn)
+                       :z (-read-int conn)
                        :yaw (-read-byte conn)
                        :pitch (-read-byte conn))]
-    (dosync
-      (let [entity (@(:entities (:world bot)) (:eid payload))
-            old-loc (:loc @entity)
-            new-loc (merge old-loc {:x (:x payload)
-                                    :y (:y payload)
-                                    :z (:z payload)})]
-        (alter entity assoc :loc new-loc)))
+    ;; (dosync
+    ;;   (let [entity (@(:entities (:world bot)) (:eid payload))
+    ;;         old-loc (:loc @entity)
+    ;;         new-loc (merge old-loc {:x (:x payload)
+    ;;                                 :y (:y payload)
+    ;;                                 :z (:z payload)})]
+    ;;     (alter entity assoc :loc new-loc)))
+    
     payload))
 
 (defn- read-packet-entitystatus [bot conn]
