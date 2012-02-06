@@ -406,7 +406,6 @@
          :pitch (-read-byte conn)))
 
 (defn- read-packet-entityteleport [bot conn]
-  (println "foobar")
   (let [payload (assoc {}
                        :eid (-read-int conn)
                        :x (-read-int conn)
@@ -414,16 +413,6 @@
                        :z (-read-int conn)
                        :yaw (-read-byte conn)
                        :pitch (-read-byte conn))]
-<<<<<<< HEAD
-    ;; (dosync
-    ;;   (let [entity (@(:entities (:world bot)) (:eid payload))
-    ;;         old-loc (:loc @entity)
-    ;;         new-loc (merge old-loc {:x (:x payload)
-    ;;                                 :y (:y payload)
-    ;;                                 :z (:z payload)})]
-    ;;     (alter entity assoc :loc new-loc)))
-    
-=======
     #_(dosync
       (let [entity (@(:entities (:world bot)) (:eid payload))
             old-loc (:loc @entity)
@@ -431,7 +420,6 @@
                                     :y (:y payload)
                                     :z (:z payload)})]
         (alter entity assoc :loc new-loc)))
->>>>>>> upstream/master
     payload))
 
 (defn- read-packet-entitystatus [bot conn]
